@@ -1,42 +1,42 @@
-.TH simple_shell 1 "November 2025" "Holberton School" "User Commands"
+.\" Manpage for simple_shell
+.TH SIMPLE_SHELL 1 "2025-11-08" "1.0" "Simple Shell Manual"
 .SH NAME
-simple_shell \- a simple UNIX command interpreter
+simple_shell \- a minimal Unix command-line interpreter
 .SH SYNOPSIS
 .B simple_shell
+.RI [ command ... ]
 .SH DESCRIPTION
-The
-.B simple_shell
-program is a simple command interpreter that mimics the behavior of the UNIX shell.
-It reads commands from standard input and executes them.
+simple_shell is a basic shell written in C that executes commands read from the standard input. 
+It supports:
+.IP "\- Executing commands"
+Runs external commands with arguments.
 
-.SH FEATURES
+.IP "\- Built-in commands"
+Currently supports:
+.RS
 .TP
-\fB•\fR Displays a prompt and waits for user input.
+.B exit
+Exit the shell.
 .TP
-\fB•\fR Executes commands with arguments.
-.TP
-\fB•\fR Handles the PATH to locate executables.
-.TP
-\fB•\fR Supports built-in commands like \fBexit\fR and \fBenv\fR.
-.TP
-\fB•\fR Works in both interactive and non-interactive modes.
+.B env
+Prints the environment variables.
+.RE
 
-.SH EXAMPLES
-Interactive mode:
-.EX
-$ ./hsh
-($) /bin/ls
-hsh main.c shell.c
-($) exit
-$
-.EE
+.IP "\- Command chaining"
+Supports execution of multiple commands separated by \";\".
 
-Non-interactive mode:
-.EX
-$ echo "/bin/ls" | ./hsh
-hsh main.c shell.c
-$
-.EE
+.SH USAGE
+Run the shell by executing:
+.RS
+$ ./simple_shell
+.RE
+
+Type commands as you would in a normal shell. To exit, type:
+.RS
+$ exit
+.RE
 
 .SH AUTHORS
-See the AUTHORS file for a list of contributors.
+Written by:
+.IP
+Your Name <alanoud_alharthi@outlook.com>
