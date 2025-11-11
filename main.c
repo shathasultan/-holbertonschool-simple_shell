@@ -1,51 +1,42 @@
 #include "main.h"
-#include <string.h>
 
 /**
- * trim_spaces - Remove leading and trailing spaces
- * @str: String to trim
+ * main - Entry point of the shell
+ * @argc: Argument count
+ * @argv: Argument vector
  *
- * Return: Pointer to trimmed string
+ * Return: Last command status
  */
-char *trim_spaces(char *str)
+int main(int argc, char *argv[])
 {
-	char *end;
+	t_shell info;
+	char *line = NULL;
+	size_t len = 0;
 
-	while (*str == ' ' || *str == '\t' || *str == '\n')
-		str++;
+	(void)argc; /* unused */
 
-	if (*str == '\0')
-		return (str);
+	info.name = argv[0];
+	info.cmd_count = 0;
+	info.last_status = 0;
 
-	end = str + strlen(str) - 1;
-
-	while (end > str && (*end == ' ' || *end == '\t' || *end == '\n'))
-		end--;
-
-	*(end + 1) = '\0';
-
-	return (str);
-}
-
-/**
- * parse_args - Parse command line into arguments
- * @line: Command line string
- * @args: Array to store arguments
- *
- * Return: Number of arguments
- */
-int parse_args(char *line, char **args)
-{
-	int i = 0;
-	char *token = strtok(line, " \t\n");
-
-	while (token && i < 63)
+	while (1)
 	{
-		args[i++] = token;
-		token = strtok(NULL, " \t\n");
+		write(STDOUT_FILENO, "$ ", 2);
+
+		if (_getline(&line, &len, stdin) == -1)
+		{
+			free(line);
+			break;
+		}
+
+		line = trim_spaces(line);
+		if (*line == '\0')
+			continue;
+
+		info.cmd_count++;
+		info.last_status = process_line(line, &info);
 	}
 
-	args[i] = NULL;
-
-	return (i);
+	free(line);
+	return (info.last_status);
 }
