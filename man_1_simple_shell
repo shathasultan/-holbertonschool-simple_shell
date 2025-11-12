@@ -1,42 +1,65 @@
-.\" Manpage for simple_shell
-.TH SIMPLE_SHELL 1 "2025-11-08" "1.0" "Simple Shell Manual"
-.SH NAME
-simple_shell \- a minimal Unix command-line interpreter
-.SH SYNOPSIS
-.B simple_shell
-.RI [ command ... ]
-.SH DESCRIPTION
-simple_shell is a basic shell written in C that executes commands read from the standard input. 
-It supports:
-.IP "\- Executing commands"
-Runs external commands with arguments.
+.TH HSH 1 "November 2025" "Version 1.0" "Simple Shell Manual"
 
-.IP "\- Built-in commands"
-Currently supports:
-.RS
+.SH NAME
+hsh \- simple UNIX command line interpreter
+
+.SH SYNOPSIS
+.B hsh
+.RI [ "command" " ..."]
+
+.SH DESCRIPTION
+.B hsh
+is a simple UNIX command line interpreter that reads commands from standard input, parses them, and executes them.
+It mimics basic functionalities of the standard shell \fBsh\fR.
+
+The shell:
+.IP • 2
+Displays a prompt and waits for user input.
+.IP • 2
+Executes commands with arguments.
+.IP • 2
+Searches for executables in the PATH.
+.IP • 2
+Handles built-in commands such as \fBexit\fR and \fBenv\fR.
+.IP • 2
+Handles the "end of file" condition (Ctrl+D).
+
+.SH BUILT-IN COMMANDS
 .TP
-.B exit
-Exit the shell.
+.B exit [status]
+Exit the shell with an optional exit status.
+If no status is provided, the exit status of the last executed command is used.
+
 .TP
 .B env
-Prints the environment variables.
-.RE
+Display the current environment variables.
 
-.IP "\- Command chaining"
-Supports execution of multiple commands separated by \";\".
-
-.SH USAGE
-Run the shell by executing:
+.SH EXAMPLES
+.PP
+Interactive mode:
 .RS
-$ ./simple_shell
-.RE
-
-Type commands as you would in a normal shell. To exit, type:
-.RS
+.nf
+$ ./hsh
+$ ls -l
+$ pwd
 $ exit
+.fi
+.RE
+
+.PP
+Non-interactive mode:
+.RS
+.nf
+$ echo "ls -l" | ./hsh
+$ echo "/bin/pwd" | ./hsh
+.fi
 .RE
 
 .SH AUTHORS
-Written by:
-.IP
-Your Name <alanoud_alharthi@outlook.com>
+Alanoud Alharthi <alanoud_alharthi@outlook.com>
+.br
+SHATHA SULTAN <shathasultann9@gmail.com>
+
+.SH SEE ALSO
+.BR sh (1),
+.BR bash (1)
