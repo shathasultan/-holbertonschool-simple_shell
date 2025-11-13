@@ -8,8 +8,9 @@ ssize_t my_getline(char **lineptr, size_t *n)
     static char buf[BUF_SIZE];
     static size_t pos = 0;
     static size_t len = 0;
-    ssize_t i = 0;             // changed to signed
+    ssize_t i = 0;  /* changed to signed */
     char *line;
+    ssize_t j;      /* declare outside loop for C90 */
 
     if (!lineptr || !n)
         return -1;
@@ -30,19 +31,19 @@ ssize_t my_getline(char **lineptr, size_t *n)
         {
             len = read(STDIN_FILENO, buf, BUF_SIZE);
             if (len <= 0)
-                return (i == 0) ? -1 : i;  // now i is signed
+                return (i == 0) ? -1 : i;
             pos = 0;
         }
 
         while (pos < len)
         {
-            if ((size_t)(i + 1) >= *n)  // cast to size_t for comparison
+            if ((size_t)(i + 1) >= *n)
             {
                 size_t new_size = *n * 2;
                 char *tmp = malloc(new_size);
                 if (!tmp)
                     return -1;
-                for (ssize_t j = 0; j < i; j++)  // manual copy
+                for (j = 0; j < i; j++)  /* manual copy */
                     tmp[j] = line[j];
                 free(line);
                 line = tmp;

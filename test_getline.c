@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-ssize_t my_getline(char **lineptr, size_t *n);  // declare the function
+ssize_t my_getline(char **lineptr, size_t *n);  /* declare the function */
 
 int main(void)
 {
