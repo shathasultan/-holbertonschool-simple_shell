@@ -1,59 +1,53 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
-#define BUF_SIZE 1024
+#define BUFFER_SIZE 1024
 
 ssize_t my_getline(char **lineptr, size_t *n)
 {
-    static char buf[BUF_SIZE];
-    static size_t pos = 0;
-    static size_t len = 0;
-    ssize_t i = 0;  /* changed to signed */
-    char *line;
-    ssize_t j;      /* declare outside loop for C90 */
+    static char buffer[BUFFER_SIZE];
+    static size_t pos = 0, len = 0;
+    ssize_t i = 0;  // <-- changed to signed
+    char *line = NULL;
 
     if (!lineptr || !n)
         return -1;
 
-    if (*lineptr == NULL || *n == 0)
-    {
+    line = *lineptr;
+    if (!line) {
         *n = 128;
-        *lineptr = malloc(*n);
-        if (!*lineptr)
+        line = malloc(*n);
+        if (!line)
             return -1;
     }
-
-    line = *lineptr;
 
     while (1)
     {
         if (pos >= len)
         {
-            len = read(STDIN_FILENO, buf, BUF_SIZE);
-            if (len <= 0)
-                return (i == 0) ? -1 : i;
+            len = read(STDIN_FILENO, buffer, BUFFER_SIZE);
             pos = 0;
+            if (len <= 0)
+                return (i > 0) ? i : -1;
         }
 
-        while (pos < len)
+        char c = buffer[pos++];
+        if (i + 1 >= (ssize_t)*n)  // cast to ssize_t
         {
-            if ((size_t)(i + 1) >= *n)
-            {
-                size_t new_size = *n * 2;
-                char *tmp = malloc(new_size);
-                if (!tmp)
-                    return -1;
-                for (j = 0; j < i; j++)  /* manual copy */
-                    tmp[j] = line[j];
-                free(line);
-                line = tmp;
-                *lineptr = line;
-                *n = new_size;
-            }
-
-            line[i++] = buf[pos++];
-            if (line[i-1] == '\n')
-                return i;
+            *n *= 2;
+            line = realloc(line, *n);
+            if (!line)
+                return -1;
         }
+
+        line[i++] = c;
+
+        if (c == '\n')
+            break;
     }
+
+    line[i] = '\0';
+    *lineptr = line;
+    return i;
 }
